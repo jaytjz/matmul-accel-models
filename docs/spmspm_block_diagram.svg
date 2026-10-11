@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="908" height="726" viewBox="0 0 908 726" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9" fill="none" stroke="#9a9a9a" stroke-width="1.5"/>
+    </marker>
+    <style>
+      .storage { fill: #161616; stroke: #3a3a3a; stroke-width: 1.2; }
+      .datapath { fill: #1d4a3a; stroke: #3d8a68; stroke-width: 1.2; }
+      .control { fill: #4a3aa0; stroke: #7a6ad0; stroke-width: 1.2; }
+      .later { fill: none; stroke: #555; stroke-width: 1.2; stroke-dasharray: 4 4; }
+      .frame { fill: none; stroke: #333; stroke-width: 1.2; }
+      .wire { fill: none; stroke: #9a9a9a; stroke-width: 1.5; }
+      .arrow { marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 4 4; }
+      .title { font-size: 17px; font-weight: 600; text-anchor: middle; }
+      .sub { font-size: 14px; text-anchor: middle; }
+      .label { font-size: 14px; fill: #d0d0d0; }
+      .note { font-size: 14px; fill: #bdbdbd; }
+    </style>
+  </defs>
+  <rect width="908" height="726" fill="#141414"/>
+
+  <!-- inputs -->
+  <rect class="storage" x="62" y="22" width="175" height="54" rx="8"/>
+  <text class="title" x="150" y="55" fill="#e6e6e6">A (CSR)</text>
+  <rect class="storage" x="412" y="22" width="200" height="54" rx="8"/>
+  <text class="title" x="512" y="55" fill="#e6e6e6">B (CSR)</text>
+  <rect class="later" x="637" y="22" width="175" height="54" rx="8"/>
+  <text class="title" x="724" y="55" fill="#e6e6e6">PartialBuffer</text>
+
+  <!-- top level -->
+  <rect class="frame" x="38" y="104" width="712" height="512" rx="10"/>
+  <text class="note" x="58" y="602">SpMSpM top level, runs the cycle loop</text>
+
+  <rect class="control" x="62" y="146" width="175" height="70" rx="8"/>
+  <text class="title" x="150" y="176" fill="#ece8ff">RowLoader</text>
+  <text class="sub" x="150" y="200" fill="#cfc8ff">Reads (k, a_ik)</text>
+
+  <rect class="datapath" x="299" y="146" width="125" height="70" rx="8"/>
+  <text class="title" x="361" y="176" fill="#e8f5ee">FiberReader</text>
+  <text class="sub" x="361" y="200" fill="#a8dcc4">Lane 0</text>
+  <g opacity="0.75">
+    <rect class="datapath" x="449" y="146" width="125" height="70" rx="8"/>
+    <text class="title" x="512" y="176" fill="#e8f5ee">FiberReader</text>
+    <text class="sub" x="512" y="200" fill="#a8dcc4">Lane 1</text>
+  </g>
+  <rect class="datapath" x="599" y="146" width="125" height="70" rx="8"/>
+  <text class="title" x="661" y="176" fill="#e8f5ee">FiberReader</text>
+  <text class="sub" x="661" y="200" fill="#a8dcc4">Lane K-1</text>
+
+  <rect class="datapath" x="387" y="271" width="250" height="70" rx="8"/>
+  <text class="title" x="512" y="301" fill="#e8f5ee">Merger</text>
+  <text class="sub" x="512" y="325" fill="#a8dcc4">Min col over lanes</text>
+
+  <rect class="datapath" x="387" y="396" width="250" height="70" rx="8"/>
+  <text class="title" x="512" y="426" fill="#e8f5ee">ScaleAccumulate</text>
+  <text class="sub" x="512" y="450" fill="#a8dcc4">Scale table, acc reg</text>
+
+  <rect class="datapath" x="387" y="521" width="250" height="70" rx="8"/>
+  <text class="title" x="512" y="551" fill="#e8f5ee">CSRWriter</text>
+  <text class="sub" x="512" y="575" fill="#a8dcc4">Builds C row_ptr</text>
+
+  <!-- wires -->
+  <path class="wire arrow" d="M150 76 V144"/>
+  <path class="wire arrow" d="M237 181 H297"/>
+  <text class="label" x="268" y="168" text-anchor="middle">row k</text>
+
+  <path class="wire arrow" d="M512 76 V144"/>
+  <path class="wire" d="M361 116 H661"/>
+  <path class="wire arrow" d="M361 116 V144"/>
+  <path class="wire arrow" d="M661 116 V144"/>
+  <path class="wire dashed" d="M712 76 V116 H661"/>
+
+  <path class="wire arrow" d="M361 216 L449 269"/>
+  <path class="wire arrow" d="M512 216 V269"/>
+  <path class="wire arrow" d="M661 216 L575 269"/>
+
+  <path class="wire arrow" d="M512 341 V394"/>
+  <text class="label" x="528" y="374">Elem / EOS</text>
+
+  <path class="wire arrow" d="M150 216 V419 H385"/>
+  <text class="label" x="268" y="407" text-anchor="middle">a_ik</text>
+
+  <path class="wire dashed arrow" d="M637 431 H787 V78"/>
+  <text class="label" x="685" y="418">partials</text>
+
+  <path class="wire arrow" d="M512 466 V519"/>
+  <path class="wire arrow" d="M512 591 V644"/>
+
+  <!-- output -->
+  <rect class="storage" x="412" y="646" width="200" height="54" rx="8"/>
+  <text class="title" x="512" y="679" fill="#e6e6e6">C (CSR)</text>
+
+  <!-- legend -->
+  <rect class="control" x="62" y="654" width="18" height="18" rx="3"/>
+  <text class="label" x="90" y="668">Control</text>
+  <rect class="datapath" x="187" y="654" width="18" height="18" rx="3"/>
+  <text class="label" x="215" y="668">Datapath</text>
+  <rect class="later" x="62" y="682" width="18" height="18" rx="3"/>
+  <text class="label" x="90" y="696">Add later</text>
+  <rect class="storage" x="187" y="682" width="18" height="18" rx="3"/>
+  <text class="label" x="215" y="696">Storage</text>
+</svg>

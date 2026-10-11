@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="908" height="730" viewBox="0 0 908 730" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9" fill="none" stroke="#9a9a9a" stroke-width="1.5"/>
+    </marker>
+    <style>
+      .storage { fill: #161616; stroke: #3a3a3a; stroke-width: 1.2; }
+      .datapath { fill: #1d4a3a; stroke: #3d8a68; stroke-width: 1.2; }
+      .frame { fill: none; stroke: #333; stroke-width: 1.2; }
+      .wire { fill: none; stroke: #9a9a9a; stroke-width: 1.5; marker-end: url(#arrow); }
+      .title { font-size: 17px; font-weight: 600; text-anchor: middle; }
+      .sub { font-size: 14px; text-anchor: middle; }
+      .label { font-size: 14px; fill: #d0d0d0; }
+      .note { font-size: 14px; fill: #bdbdbd; }
+    </style>
+  </defs>
+  <rect width="908" height="730" fill="#141414"/>
+
+  <!-- inputs, skewed by run_matmul -->
+  <rect class="storage" x="290" y="22" width="530" height="62" rx="8"/>
+  <text class="title" x="555" y="48" fill="#e6e6e6">B (dense)</text>
+  <text class="sub" x="555" y="70" fill="#bdbdbd">column c delayed c cycles</text>
+  <rect class="storage" x="40" y="200" width="160" height="310" rx="8"/>
+  <text class="title" x="120" y="345" fill="#e6e6e6">A (dense)</text>
+  <text class="sub" x="120" y="369" fill="#bdbdbd">row r delayed</text>
+  <text class="sub" x="120" y="389" fill="#bdbdbd">r cycles</text>
+
+  <!-- array -->
+  <rect class="frame" x="250" y="150" width="610" height="410" rx="10"/>
+  <text class="note" x="270" y="545">SystolicArray, M x N PEs (3 x 3 shown), output stationary</text>
+
+  <g id="pes">
+    <rect class="datapath" x="290" y="190" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="480" y="190" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="670" y="190" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="290" y="310" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="480" y="310" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="670" y="310" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="290" y="430" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="480" y="430" width="150" height="70" rx="8"/>
+    <rect class="datapath" x="670" y="430" width="150" height="70" rx="8"/>
+  </g>
+  <g class="title" fill="#e8f5ee">
+    <text x="365" y="220">PE[0][0]</text><text x="555" y="220">PE[0][1]</text><text x="745" y="220">PE[0][2]</text>
+    <text x="365" y="340">PE[1][0]</text><text x="555" y="340">PE[1][1]</text><text x="745" y="340">PE[1][2]</text>
+    <text x="365" y="460">PE[2][0]</text><text x="555" y="460">PE[2][1]</text><text x="745" y="460">PE[2][2]</text>
+  </g>
+  <g class="sub" fill="#a8dcc4">
+    <text x="365" y="244">acc += top x left</text><text x="555" y="244">acc += top x left</text><text x="745" y="244">acc += top x left</text>
+    <text x="365" y="364">acc += top x left</text><text x="555" y="364">acc += top x left</text><text x="745" y="364">acc += top x left</text>
+    <text x="365" y="484">acc += top x left</text><text x="555" y="484">acc += top x left</text><text x="745" y="484">acc += top x left</text>
+  </g>
+
+  <!-- B enters from the top, passes down -->
+  <path class="wire" d="M365 84 V188"/>
+  <path class="wire" d="M555 84 V188"/>
+  <path class="wire" d="M745 84 V188"/>
+  <text class="label" x="373" y="120">col 0</text>
+  <text class="label" x="563" y="120">col 1</text>
+  <text class="label" x="753" y="120">col 2</text>
+  <path class="wire" d="M365 260 V308"/><path class="wire" d="M555 260 V308"/><path class="wire" d="M745 260 V308"/>
+  <path class="wire" d="M365 380 V428"/><path class="wire" d="M555 380 V428"/><path class="wire" d="M745 380 V428"/>
+
+  <!-- A enters from the left, passes right -->
+  <path class="wire" d="M200 225 H288"/>
+  <path class="wire" d="M200 345 H288"/>
+  <path class="wire" d="M200 465 H288"/>
+  <text class="label" x="214" y="216">row 0</text>
+  <text class="label" x="214" y="336">row 1</text>
+  <text class="label" x="214" y="456">row 2</text>
+  <path class="wire" d="M440 225 H478"/><path class="wire" d="M630 225 H668"/>
+  <path class="wire" d="M440 345 H478"/><path class="wire" d="M630 345 H668"/>
+  <path class="wire" d="M440 465 H478"/><path class="wire" d="M630 465 H668"/>
+
+  <!-- output -->
+  <path class="wire" d="M555 560 V614"/>
+  <text class="label" x="567" y="592">get_acc() after K + M + N - 2 cycles</text>
+  <rect class="storage" x="455" y="616" width="200" height="54" rx="8"/>
+  <text class="title" x="555" y="649" fill="#e6e6e6">C (dense)</text>
+
+  <!-- legend -->
+  <rect class="datapath" x="40" y="690" width="18" height="18" rx="3"/>
+  <text class="label" x="68" y="704">Datapath</text>
+  <rect class="storage" x="165" y="690" width="18" height="18" rx="3"/>
+  <text class="label" x="193" y="704">Storage</text>
+</svg>
